@@ -25,8 +25,8 @@ function buildImages(key: GalleryKey) {
   return images;
 }
 
-export default function GalleryClient() {
-  const [active, setActive] = useState<GalleryKey>("aiden");
+export default function GalleryClient({ initialEvent }: { initialEvent: GalleryKey }) {
+  const [active, setActive] = useState<GalleryKey>(initialEvent);
 
   const images = buildImages(active);
 
