@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: white;
+  background: transparent; /* IMPORTANT: background comes from BackgroundVideo */
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Subtle glass panel look */
+.panel {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 18px;
+}
+
+.panel-light {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 18px;
+}
+
+.section {
+  padding: 56px 0;
+}
+
+.container {
+  max-width: 1120px;
+  padding: 0 20px;
+  margin: 0 auto;
+}
+
+.hairline {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hairline-dark {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
