@@ -1,30 +1,33 @@
 import type { GalleryKey } from "./events";
 
-export const galleries: { key: GalleryKey; label: string; date: string }[] = [
-  { key: "aiden", label: "Aiden", date: "12.26.25" },
-  { key: "gioh", label: "Gioh Cecato", date: "10.17.25" },
-  { key: "drakk", label: "Drakk", date: "08.08.25" },
+/**
+ * Photo sets, newest first. Each set lives in public/media/<key>/ as
+ * <key>-1.jpg, <key>-2.jpg, … up to `count`.
+ */
+export const galleries: { key: GalleryKey; label: string; date: string; count: number }[] = [
+  { key: "obi", label: "O.B.I. + Per Pleks", date: "09.25.26", count: 15 },
+  { key: "raw", label: "Raw 10 Years", date: "04.25.26", count: 15 },
+  { key: "perpleks", label: "Per Pleks", date: "03.14.26", count: 15 },
+  { key: "aiden", label: "Aiden", date: "12.26.25", count: 20 },
+  { key: "gioh", label: "Gioh Cecato", date: "10.17.25", count: 20 },
+  { key: "drakk", label: "Drakk", date: "08.08.25", count: 20 },
 ];
 
-const PHOTOS_PER_SET = 20;
-
 export function galleryImages(key: GalleryKey) {
-  return Array.from({ length: PHOTOS_PER_SET }, (_, i) => {
-    const n = i + 1;
-    if (key === "aiden") return `/media/aiden/AIDEN-${n}.jpg`;
-    if (key === "drakk") return `/media/drakk/drakk-${n}.jpeg`;
-    return `/media/gioh/BWTGC-${n}.jpg`;
-  });
+  const set = galleries.find((g) => g.key === key);
+  return Array.from({ length: set?.count ?? 0 }, (_, i) => `/media/${key}/${key}-${i + 1}.jpg`);
 }
 
-/** A fixed mix of photos from every set, for the homepage strip. */
-export function featuredPhotos(count = 8) {
+/**
+ * Every photo from every set, interleaved so the first few span all nights.
+ * The homepage strip shows a random handful of these on each visit.
+ */
+export function allPhotos() {
   const sets = galleries.map((g) => ({ key: g.key, images: galleryImages(g.key) }));
-  const picks: { src: string; key: GalleryKey }[] = [];
-  for (let i = 0; picks.length < count; i++) {
-    const set = sets[i % sets.length];
-    const src = set.images[(Math.floor(i / sets.length) * 3 + 2) % set.images.length];
-    picks.push({ src, key: set.key });
+  const longest = Math.max(...sets.map((s) => s.images.length));
+  const photos: { src: string; key: GalleryKey }[] = [];
+  for (let i = 0; i < longest; i++) {
+    for (const s of sets) if (s.images[i]) photos.push({ src: s.images[i], key: s.key });
   }
-  return picks;
+  return photos;
 }

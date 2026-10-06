@@ -1,4 +1,4 @@
-export type GalleryKey = "aiden" | "drakk" | "gioh";
+export type GalleryKey = "obi" | "raw" | "perpleks" | "aiden" | "gioh" | "drakk";
 
 export type BWEvent = {
   id: string;
@@ -52,6 +52,7 @@ export const events: BWEvent[] = [
     tags: ["German Techno", "Hard Techno", "Techno"],
     flyerSrc: shotgunFlyer("obiperpleks169_kczk2e.png"),
     ticketsHref: shotgunEvent("brainwash-presents-o-b-i-per-pleks"),
+    gallery: "obi",
   },
   {
     id: "lars-huismann",
@@ -100,6 +101,7 @@ export const events: BWEvent[] = [
     tags: ["Hard Techno", "Hard Groove", "Schranz"],
     flyerSrc: "/flyers/rawflyer.webp",
     ticketsHref: shotgunEvent("raw-x-brainwash-raw-10-years"),
+    gallery: "raw",
   },
   {
     id: "perpleks",
@@ -112,6 +114,7 @@ export const events: BWEvent[] = [
     tags: ["Techno", "Hard Techno", "German Techno"],
     flyerSrc: "/flyers/perpleksflyer.webp",
     ticketsHref: shotgunEvent("brainwash-presents-per-pleks"),
+    gallery: "perpleks",
     promoSrc: "/promos/perplekspromo.mp4",
   },
   {

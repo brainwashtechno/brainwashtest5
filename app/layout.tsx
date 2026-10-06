@@ -4,6 +4,7 @@ import "./globals.css";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import Reveal from "@/components/reveal";
+import Intro from "@/components/intro";
 
 const anton = Anton({ weight: "400", subsets: ["latin"], variable: "--font-anton", display: "swap" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -35,7 +36,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className={`${anton.variable} ${inter.variable} ${jetbrains.variable}`}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js-reveal')" }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.documentElement.classList.add('js-reveal');" +
+              // Play the intro once per browser session, unless motion is reduced.
+              "try{if(!sessionStorage.getItem('bw-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('bw-intro')}catch(e){}",
+          }}
+        />
       </head>
       <body>
         <SiteHeader />
@@ -43,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteFooter />
         <div className="grain" aria-hidden="true" />
         <Reveal />
+        <Intro />
       </body>
     </html>
   );

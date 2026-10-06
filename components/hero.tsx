@@ -26,7 +26,8 @@ export default function Hero({ next }: { next?: BWEvent }) {
         playsInline
         preload="auto"
         aria-hidden="true"
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(0.4) contrast(1.1) brightness(0.6)" }}
+        className="hero-video"
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", filter: "grayscale(0.4) contrast(1.1) brightness(0.6)" }}
       />
       <div
         aria-hidden="true"

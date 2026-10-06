@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Hero from "@/components/hero";
 import EventFeature from "@/components/event-feature";
-import RecapVideo from "@/components/recap-video";
+import RecapGrid from "@/components/recap-grid";
+import PhotoStrip from "@/components/photo-strip";
 import { getPastEvents, getUpcomingEvents, shortDate, uniqueArtistCount, SHOTGUN_PAGE } from "@/data/events";
-import { featuredPhotos } from "@/data/gallery";
+import { allPhotos } from "@/data/gallery";
 import { site } from "@/data/site";
 
 // Re-check once a day which show is "next".
@@ -12,8 +13,8 @@ export const revalidate = 86400;
 export default function HomePage() {
   const upcoming = getUpcomingEvents();
   const next = upcoming[0];
-  const recaps = getPastEvents().filter((e) => e.promoSrc).slice(0, 3);
-  const photos = featuredPhotos(8);
+  const recaps = getPastEvents().filter((e) => e.promoSrc);
+  const photos = allPhotos();
 
   const stats = [
     { value: "20+", label: "Events thrown" },
@@ -90,28 +91,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-3">
-              {recaps.map((e, i) => (
-                <article key={e.id} data-reveal style={{ ["--reveal-delay" as string]: `${i * 120}ms` }}>
-                  <div className="media-hover" style={{ aspectRatio: "4 / 5", border: "1px solid var(--line)" }}>
-                    <RecapVideo src={e.promoSrc!} label={`${e.headline} recap`} />
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 16, gap: 12 }}>
-                    <h3 className="display" style={{ fontSize: 32 }}>
-                      {e.headline}
-                    </h3>
-                    <span className="mono" style={{ color: "var(--smoke-2)" }}>
-                      {shortDate(e.date)}
-                    </span>
-                  </div>
-                  {e.gallery ? (
-                    <Link href={`/gallery?event=${e.gallery}`} className="link-arrow" style={{ display: "inline-block", marginTop: 12 }}>
-                      Photos →
-                    </Link>
-                  ) : null}
-                </article>
-              ))}
-            </div>
+            <RecapGrid events={recaps} />
           </div>
         </section>
       ) : null}
@@ -164,22 +144,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-            {photos.map((p, i) => (
-              <Link
-                key={p.src}
-                href={`/gallery?event=${p.key}`}
-                className="media-hover"
-                data-reveal
-                style={{
-                  aspectRatio: "4 / 5",
-                  ["--reveal-delay" as string]: `${(i % 4) * 80}ms`,
-                }}
-              >
-                <img src={p.src} alt="Brainwash crowd and DJ" loading="lazy" />
-              </Link>
-            ))}
-          </div>
+          <PhotoStrip photos={photos} />
         </div>
       </section>
 

@@ -327,3 +327,52 @@ video {
     transform: none;
   }
 }
+
+/* ---------- Hero video ---------- */
+/* The loop carries the wordmark, so phones show the whole frame (slightly
+   enlarged; only texture sits at the edges) instead of cropping the logo. */
+.hero-video {
+  object-fit: cover;
+}
+
+@media (max-width: 767px) {
+  .hero-video {
+    object-fit: contain;
+    transform: scale(1.3);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 38%, #000 44%, #000 56%, transparent 62%);
+    mask-image: linear-gradient(to bottom, transparent 38%, #000 44%, #000 56%, transparent 62%);
+  }
+}
+
+/* ---------- Opening intro (components/intro.tsx) ---------- */
+.intro {
+  display: none;
+}
+
+html.bw-intro {
+  overflow: hidden;
+}
+
+html.bw-intro .intro {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #000;
+  transition: opacity 220ms linear;
+}
+
+/* Once the black splits, the canvas paints the falling halves itself. */
+.intro[data-state="breaking"] {
+  background: transparent;
+}
+
+.intro[data-state="skipping"] {
+  opacity: 0;
+}
+
+.intro canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
