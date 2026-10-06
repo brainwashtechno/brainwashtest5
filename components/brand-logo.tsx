@@ -1,19 +1,9 @@
-// components/brand-logo.tsx
 import Link from "next/link";
-import Image from "next/image";
 
-export default function BrandLogo() {
+export default function BrandLogo({ onClick }: { onClick?: () => void }) {
   return (
-    <Link href="/" className="inline-flex items-center gap-3 select-none">
-      <Image
-        src="/brainwash.png" // MUST start with /
-        alt="Brainwash"
-        width={180}
-        height={48}
-        priority
-        unoptimized // IMPORTANT for StackBlitz/WebContainer reliability
-        className="h-[44px] w-auto object-contain"
-      />
+    <Link href="/" onClick={onClick} aria-label="Brainwash home" className="inline-flex items-center">
+      <img src="/brainwash-logo.png" alt="Brainwash" width={919} height={231} style={{ height: 26, width: "auto" }} />
     </Link>
   );
 }

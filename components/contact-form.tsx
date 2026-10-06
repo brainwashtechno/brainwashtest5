@@ -1,87 +1,85 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-type Props = {
-  toEmail?: string; // optional - if you want mailto
-};
-
-export default function ContactForm({ toEmail }: Props) {
+/** Opens the visitor's email app with the message filled in (no server needed). */
+export default function ContactForm({ toEmail }: { toEmail: string }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [topic, setTopic] = useState("Booking");
   const [message, setMessage] = useState("");
-  const [submitting, setSubmitting] = useState(false);
 
-  const canSubmit = useMemo(() => {
-    return name.trim().length > 0 && email.trim().length > 0 && message.trim().length > 0;
-  }, [name, email, message]);
+  const canSubmit = name.trim() && email.trim() && message.trim();
 
-  async function onSubmit(e: React.FormEvent) {
+  function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!canSubmit) return;
-
-    setSubmitting(true);
-
-    // OPTION A (no backend): mailto
-    // This is the safest in Stackblitz with zero API needed.
-    if (toEmail) {
-      const subject = encodeURIComponent(`Brainwash — Contact from ${name}`);
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
-      window.location.href = `mailto:${toEmail}?subject=${subject}&body=${body}`;
-      setSubmitting(false);
-      return;
-    }
-
-    // OPTION B: placeholder (if you later add an API route)
-    // For now, just "fake success".
-    await new Promise((r) => setTimeout(r, 400));
-    setSubmitting(false);
-
-    // Clear
-    setName("");
-    setEmail("");
-    setMessage("");
-    alert("Message ready to send (connect API or set mailto email).");
+    const subject = encodeURIComponent(`Brainwash — ${topic} — ${name}`);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`);
+    window.location.href = `mailto:${toEmail}?subject=${subject}&body=${body}`;
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-4">
-      <label className="grid gap-2">
-        <span className="text-sm text-white/80">Name</span>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="rounded-xl border border-white/15 bg-black/40 px-4 py-3 text-white outline-none focus:border-white/35"
-          placeholder="Your name"
-        />
+    <form onSubmit={onSubmit} style={{ display: "grid", gap: 28 }}>
+      <label style={{ display: "grid", gap: 4 }}>
+        <span className="mono" style={{ color: "var(--smoke-2)" }}>
+          Name
+        </span>
+        <input className="field" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" autoComplete="name" required />
       </label>
 
-      <label className="grid gap-2">
-        <span className="text-sm text-white/80">Email</span>
+      <label style={{ display: "grid", gap: 4 }}>
+        <span className="mono" style={{ color: "var(--smoke-2)" }}>
+          Email
+        </span>
         <input
+          className="field"
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-xl border border-white/15 bg-black/40 px-4 py-3 text-white outline-none focus:border-white/35"
           placeholder="you@email.com"
+          autoComplete="email"
+          required
         />
       </label>
 
-      <label className="grid gap-2">
-        <span className="text-sm text-white/80">Message</span>
+      <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
+        <legend className="mono" style={{ color: "var(--smoke-2)", marginBottom: 12 }}>
+          Topic
+        </legend>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          {["Booking", "Press", "Collab", "Other"].map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setTopic(t)}
+              className="btn btn-sm"
+              aria-pressed={topic === t}
+              style={topic === t ? { background: "var(--red)", borderColor: "var(--red)" } : { borderColor: "var(--line)" }}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      </fieldset>
+
+      <label style={{ display: "grid", gap: 4 }}>
+        <span className="mono" style={{ color: "var(--smoke-2)" }}>
+          Message
+        </span>
         <textarea
+          className="field"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="min-h-[140px] rounded-xl border border-white/15 bg-black/40 px-4 py-3 text-white outline-none focus:border-white/35"
-          placeholder="Write your message..."
+          placeholder="Tell us what you have in mind"
+          rows={5}
+          style={{ resize: "vertical" }}
+          required
         />
       </label>
 
-      <button
-        type="submit"
-        disabled={!canSubmit || submitting}
-        className="inline-flex w-fit items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-medium text-white hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        {submitting ? "Sending..." : "Submit"}
+      <button type="submit" disabled={!canSubmit} className="btn btn-solid" style={{ justifySelf: "start", opacity: canSubmit ? 1 : 0.5 }}>
+        Send message
       </button>
     </form>
   );

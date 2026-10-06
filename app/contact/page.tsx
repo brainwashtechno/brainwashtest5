@@ -1,15 +1,40 @@
+import type { Metadata } from "next";
+import PageTitle from "@/components/page-title";
 import ContactForm from "@/components/contact-form";
-import { SectionHeader } from "@/components/ui";
+import { site } from "@/data/site";
+
+export const metadata: Metadata = { title: "Contact" };
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-14">
-      <SectionHeader kicker="" title="Contact" subtitle="Send us a message and we’ll get back to you." />
+    <>
+      <PageTitle kicker="Bookings · Press · Collabs" title="Contact" intro="Artists, venues, press and collaborators: send us a message and we'll get back to you." />
 
-      <div className="mt-8 max-w-2xl rounded-3xl border border-white/10 bg-black/30 p-6">
-        {/* Put your email here if you want mailto to work */}
-        <ContactForm toEmail="brainwashatl@gmail.com" />
-      </div>
-    </div>
+      <section className="container grid gap-16 md:grid-cols-[1fr_1.3fr]" style={{ paddingBottom: 128 }}>
+        <div data-reveal>
+          <div className="mono" style={{ color: "var(--smoke-2)" }}>
+            Email
+          </div>
+          <a href={`mailto:${site.email}`} className="display" style={{ display: "inline-block", fontSize: "clamp(24px, 3.2vw, 40px)", marginTop: 8, wordBreak: "break-all" }}>
+            {site.email}
+          </a>
+
+          <div className="mono" style={{ color: "var(--smoke-2)", marginTop: 48 }}>
+            Follow
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 20, marginTop: 12 }}>
+            {Object.entries(site.socials).map(([name, href]) => (
+              <a key={name} href={href} target="_blank" rel="noreferrer" className="link-arrow">
+                {name} ↗
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div data-reveal style={{ ["--reveal-delay" as string]: "120ms" }}>
+          <ContactForm toEmail={site.email} />
+        </div>
+      </section>
+    </>
   );
 }

@@ -1,83 +1,93 @@
-import FlyerImg from "@/components/flyer-img";
-import { SectionHeader, Pill, Btn } from "@/components/ui";
-import { upcomingEvent, pastEvents } from "@/data/events";
+import type { Metadata } from "next";
+import Link from "next/link";
+import PageTitle from "@/components/page-title";
+import EventFeature from "@/components/event-feature";
+import { getPastEvents, getUpcomingEvents, shortDate, SHOTGUN_PAGE } from "@/data/events";
+
+export const metadata: Metadata = { title: "Events" };
+export const revalidate = 86400;
 
 export default function EventsPage() {
+  const upcoming = getUpcomingEvents();
+  const past = getPastEvents();
+
   return (
-    <div className="container">
-      <div className="section">
-        <SectionHeader
-          kicker=""
-          title="Events"
-          subtitle="Upcoming + past events. Tickets are hosted on Shotgun."
-        />
-      </div>
+    <>
+      <PageTitle kicker="Atlanta · Warehouse · 18+" title="Events" intro="Every Brainwash night, from the next one back to the first. Tickets are sold on Shotgun." />
 
-      {/* UPCOMING pinned */}
-      <div className="panel" style={{ padding: 18 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, minHeight: 520 }}>
-          <div style={{ minHeight: 480 }}>
-            <FlyerImg src={upcomingEvent.flyerSrc} alt={`${upcomingEvent.title} flyer`} />
+      <section className="container" style={{ paddingBottom: 96 }}>
+        <div className="mono red" style={{ marginBottom: 32 }}>
+          Upcoming
+        </div>
+        {upcoming.length ? (
+          <div style={{ display: "grid", gap: 96 }}>
+            {upcoming.map((e) => (
+              <EventFeature key={e.id} event={e} />
+            ))}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", padding: 6 }}>
+        ) : (
+          <div style={{ border: "1px solid var(--line)", padding: "48px 28px" }}>
+            <div className="display" style={{ fontSize: 48 }}>
+              New dates soon
+            </div>
+            <a href={SHOTGUN_PAGE} target="_blank" rel="noreferrer" className="btn" style={{ marginTop: 24 }}>
+              Follow on Shotgun ↗
+            </a>
+          </div>
+        )}
+      </section>
+
+      <section id="past" className="section hairline" style={{ scrollMarginTop: "var(--header-h)" }}>
+        <div className="container">
+          <div className="section-head" data-reveal>
             <div>
-              <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 13, fontWeight: 700 }}>
-                {upcomingEvent.dateLabel}
-              </div>
-              <div style={{ fontSize: 28, fontWeight: 900, marginTop: 10 }}>
-                {upcomingEvent.title}
-              </div>
-              <div style={{ marginTop: 10, color: "rgba(255,255,255,0.70)" }}>{upcomingEvent.city}</div>
-
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 16 }}>
-                {upcomingEvent.tags.map((t) => (
-                  <Pill key={t}>{t}</Pill>
-                ))}
-              </div>
+              <div className="mono red">Archive</div>
+              <h2 className="display section-title" style={{ marginTop: 12 }}>
+                Past events
+              </h2>
             </div>
-
-            <div style={{ marginTop: "auto" }}>
-              <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 16 }}>
-                <Btn href={upcomingEvent.ticketsHref} variant="primary" target="_blank">Tickets</Btn>
-                <Btn href="/news" variant="ghost">News</Btn>
-              </div>
-              <div style={{ textAlign: "center", marginTop: 10, color: "rgba(255,255,255,0.60)", fontSize: 12 }}>
-                Ticketing hosted on Shotgun.
-              </div>
-            </div>
+            <span className="mono" style={{ color: "var(--smoke-2)" }}>
+              {past.length} nights
+            </span>
           </div>
+
+          <ul style={{ listStyle: "none", padding: 0, margin: 0, borderBottom: "1px solid var(--line)" }}>
+            {past.map((e) => (
+              <li key={e.id} className="hairline" data-reveal>
+                <div className="grid items-center gap-4 py-6 grid-cols-[72px_1fr] md:grid-cols-[96px_140px_1fr_auto] md:gap-8">
+                  <a href={e.ticketsHref} target="_blank" rel="noreferrer" className="media-hover" style={{ aspectRatio: "1 / 1" }}>
+                    <img src={e.flyerSrc} alt={`${e.title} flyer`} loading="lazy" />
+                  </a>
+                  <span className="mono hidden md:block" style={{ color: "var(--smoke-2)" }}>
+                    {shortDate(e.date)}
+                  </span>
+                  <div>
+                    <span className="mono md:hidden" style={{ color: "var(--smoke-2)", fontSize: 11 }}>
+                      {shortDate(e.date)}
+                    </span>
+                    <h3 className="display" style={{ fontSize: "clamp(26px, 4vw, 44px)" }}>
+                      {e.headline}
+                    </h3>
+                    <div className="mono" style={{ color: "var(--smoke-2)", fontSize: 11, marginTop: 6 }}>
+                      {[e.venue, ...e.tags].join(" · ")}
+                    </div>
+                  </div>
+                  <div className="col-span-2 md:col-span-1" style={{ display: "flex", gap: 20 }}>
+                    {e.gallery ? (
+                      <Link href={`/gallery?event=${e.gallery}`} className="link-arrow">
+                        Photos →
+                      </Link>
+                    ) : null}
+                    <a href={e.ticketsHref} target="_blank" rel="noreferrer" className="link-arrow">
+                      Shotgun ↗
+                    </a>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
-
-      {/* PAST */}
-      <div className="section">
-        <div style={{ fontSize: 18, fontWeight: 800, marginBottom: 14 }}>Past events</div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
-          {pastEvents.map((e) => (
-            <div key={e.id} className="panel" style={{ padding: 14 }}>
-              <div style={{ position: "relative", aspectRatio: "16 / 10", borderRadius: 16, overflow: "hidden" }}>
-                <FlyerImg src={e.flyerSrc} alt={`${e.title} flyer`} />
-              </div>
-
-              <div style={{ marginTop: 10, color: "rgba(255,255,255,0.70)", fontSize: 12 }}>{e.dateLabel}</div>
-              <div style={{ marginTop: 6, fontWeight: 900 }}>{e.title}</div>
-              <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 13, marginTop: 4 }}>{e.city}</div>
-
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 10 }}>
-                {e.tags.map((t) => (
-                  <Pill key={t}>{t}</Pill>
-                ))}
-              </div>
-
-              <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-                <Btn href={e.ticketsHref} variant="primary" target="_blank">Tickets</Btn>
-                {e.recapHref ? <Btn href={e.recapHref} variant="ghost">Recap</Btn> : null}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 }
