@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Hero from "@/components/hero";
-import Ticker from "@/components/ticker";
 import EventFeature from "@/components/event-feature";
 import RecapVideo from "@/components/recap-video";
 import { getPastEvents, getUpcomingEvents, shortDate, uniqueArtistCount, SHOTGUN_PAGE } from "@/data/events";
@@ -17,7 +16,7 @@ export default function HomePage() {
   const photos = featuredPhotos(8);
 
   const stats = [
-    { value: `${getPastEvents().length}`, label: "Nights thrown" },
+    { value: "20+", label: "Events thrown" },
     { value: `${uniqueArtistCount()}+`, label: "Artists booked" },
     { value: `${site.since}`, label: "Underground since" },
   ];
@@ -25,7 +24,6 @@ export default function HomePage() {
   return (
     <>
       <Hero next={next} />
-      <Ticker />
 
       {/* NEXT UP */}
       <section className="section">

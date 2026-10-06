@@ -264,43 +264,6 @@ video {
   transform: none;
 }
 
-/* ---------- Genre ticker ---------- */
-.ticker {
-  background: var(--red);
-  color: var(--text);
-  overflow: hidden;
-  white-space: nowrap;
-  border-top: 1px solid rgba(0, 0, 0, 0.4);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-}
-
-.ticker-track {
-  display: inline-flex;
-  animation: ticker 40s linear infinite;
-}
-
-.ticker:hover .ticker-track {
-  animation-play-state: paused;
-}
-
-.ticker-item {
-  font-family: var(--font-anton), Impact, sans-serif;
-  text-transform: uppercase;
-  font-size: 22px;
-  padding: 12px 0;
-  letter-spacing: 0.04em;
-}
-
-.ticker-sep {
-  margin: 0 22px;
-  opacity: 0.5;
-}
-
-@keyframes ticker {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
 /* ---------- Hero wordmark flicker (once) ---------- */
 .flicker-in {
   animation: flicker 1.4s linear 0.2s both;

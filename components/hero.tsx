@@ -46,15 +46,8 @@ export default function Hero({ next }: { next?: BWEvent }) {
           {site.tagline} — since {site.since}
         </div>
 
+        {/* The background video carries the wordmark, so it isn't repeated here. */}
         <h1 className="sr-only">Brainwash</h1>
-        <img
-          src="/brainwash-logo.png"
-          alt=""
-          width={919}
-          height={231}
-          className="flicker-in"
-          style={{ width: "100%", maxWidth: 1180, height: "auto", marginTop: 18 }}
-        />
 
         <div
           className="fade-up"

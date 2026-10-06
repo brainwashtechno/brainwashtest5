@@ -53,9 +53,6 @@ export default function SiteFooter() {
                 </li>
               ))}
             </ul>
-            <a href={`mailto:${site.email}`} className="mono dim" style={{ display: "inline-block", marginTop: 20, textTransform: "none", letterSpacing: "0.04em" }}>
-              {site.email}
-            </a>
           </div>
         </div>
 

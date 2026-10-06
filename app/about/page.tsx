@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import PageTitle from "@/components/page-title";
-import Ticker from "@/components/ticker";
 
 export const metadata: Metadata = { title: "About" };
 
@@ -31,8 +30,6 @@ export default function AboutPage() {
         title="About"
         intro="Brainwash is an underground techno collective rooted in culture, intention, and experience."
       />
-
-      <Ticker items={["This isn't nightlife", "This is participation"]} />
 
       <section className="section">
         <div className="container">
