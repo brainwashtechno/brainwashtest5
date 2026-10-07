@@ -1,26 +1,69 @@
 "use client";
 
 import { useState } from "react";
+import { site } from "@/data/site";
 
-/** Opens the visitor's email app with the message filled in (no server needed). */
-export default function ContactForm({ toEmail }: { toEmail: string }) {
+/** Sends the message straight to the Brainwash inbox through Web3Forms. */
+export default function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [topic, setTopic] = useState("Booking");
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  const canSubmit = name.trim() && email.trim() && message.trim();
+  const canSubmit = name.trim() && email.trim() && message.trim() && status !== "sending";
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!canSubmit) return;
-    const subject = encodeURIComponent(`Brainwash — ${topic} — ${name}`);
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`);
-    window.location.href = `mailto:${toEmail}?subject=${subject}&body=${body}`;
+    // Hidden field only bots fill in.
+    const botcheck = (e.currentTarget.elements.namedItem("botcheck") as HTMLInputElement | null)?.checked;
+    setStatus("sending");
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: site.contactFormKey,
+          subject: `Brainwash website: ${topic} from ${name}`,
+          from_name: "Brainwash website",
+          replyto: email,
+          name,
+          email,
+          topic,
+          message,
+          botcheck,
+        }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.success) throw new Error(data?.message || "Send failed");
+      setStatus("sent");
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  if (status === "sent") {
+    return (
+      <div role="status" style={{ display: "grid", gap: 16 }}>
+        <div className="mono red">Message sent</div>
+        <p className="display" style={{ fontSize: "clamp(32px, 4vw, 48px)", margin: 0 }}>
+          Thanks. We&apos;ll get back to you.
+        </p>
+        <button type="button" className="link-arrow" onClick={() => setStatus("idle")} style={{ justifySelf: "start", background: "none", border: 0, padding: 0, cursor: "pointer" }}>
+          Send another →
+        </button>
+      </div>
+    );
   }
 
   return (
     <form onSubmit={onSubmit} style={{ display: "grid", gap: 28 }}>
+      <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ display: "none" }} />
+
       <label style={{ display: "grid", gap: 4 }}>
         <span className="mono" style={{ color: "var(--smoke-2)" }}>
           Name
@@ -78,9 +121,16 @@ export default function ContactForm({ toEmail }: { toEmail: string }) {
         />
       </label>
 
-      <button type="submit" disabled={!canSubmit} className="btn btn-solid" style={{ justifySelf: "start", opacity: canSubmit ? 1 : 0.5 }}>
-        Send message
-      </button>
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 20 }}>
+        <button type="submit" disabled={!canSubmit} className="btn btn-solid" style={{ opacity: canSubmit ? 1 : 0.5 }}>
+          {status === "sending" ? "Sending…" : "Send message"}
+        </button>
+        {status === "error" ? (
+          <span role="alert" className="mono" style={{ color: "var(--red-hi)", textTransform: "none", letterSpacing: "0.02em" }}>
+            Couldn&apos;t send. Try again, or message us on Instagram.
+          </span>
+        ) : null}
+      </div>
     </form>
   );
 }

@@ -3,6 +3,8 @@ export const site = {
   tagline: "Atlanta underground techno",
   since: 2024,
   email: "brainwash.techno0@gmail.com",
+  /** Web3Forms access key: contact form messages are delivered to `email`. Safe to be public. */
+  contactFormKey: "70f04c4c-f100-4b99-b3af-a09d9e7f949c",
   socials: {
     instagram: "https://www.instagram.com/brainwashtechno/",
     telegram: "https://t.me/brainwashtechno",

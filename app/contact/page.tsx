@@ -25,7 +25,7 @@ export default function ContactPage() {
         </div>
 
         <div data-reveal style={{ ["--reveal-delay" as string]: "120ms" }}>
-          <ContactForm toEmail={site.email} />
+          <ContactForm />
         </div>
       </section>
     </>
