@@ -2,7 +2,7 @@ export const site = {
   name: "Brainwash",
   tagline: "Atlanta underground techno",
   since: 2024,
-  email: "brainwashatl@gmail.com",
+  email: "brainwash.techno0@gmail.com",
   socials: {
     instagram: "https://www.instagram.com/brainwashtechno/",
     telegram: "https://t.me/brainwashtechno",

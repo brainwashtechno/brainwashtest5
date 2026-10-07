@@ -13,13 +13,6 @@ export default function ContactPage() {
       <section className="container grid gap-16 md:grid-cols-[1fr_1.3fr]" style={{ paddingBottom: 128 }}>
         <div data-reveal>
           <div className="mono" style={{ color: "var(--smoke-2)" }}>
-            Email
-          </div>
-          <a href={`mailto:${site.email}`} className="display" style={{ display: "inline-block", fontSize: "clamp(24px, 3.2vw, 40px)", marginTop: 8, wordBreak: "break-all" }}>
-            {site.email}
-          </a>
-
-          <div className="mono" style={{ color: "var(--smoke-2)", marginTop: 48 }}>
             Follow
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 20, marginTop: 12 }}>
