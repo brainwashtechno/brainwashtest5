@@ -171,11 +171,11 @@ export const events: BWEvent[] = [
     title: "Brainwash: Annoluxx",
     headline: "Annoluxx",
     lineup: ["Annoluxx"],
-    date: "2025-06-12",
+    date: "2025-06-13",
     venue: "Underground Atlanta",
     tags: ["Techno", "EDM", "Acid Techno"],
     flyerSrc: "/flyers/annoluxflyer.webp",
-    ticketsHref: SHOTGUN_PAGE,
+    ticketsHref: shotgunEvent("brainwash-anoluxx"),
   },
   {
     id: "bw50",
