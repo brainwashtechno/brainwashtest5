@@ -30,6 +30,18 @@ const shotgunFlyer = (id: string) =>
 // moves to "past" by itself the day after it happens.
 export const events: BWEvent[] = [
   {
+    id: "anetha",
+    title: "Brainwash Presents: Anetha",
+    headline: "Anetha",
+    lineup: ["Anetha", "Caroline Arnich", "GNVR", "ANYÄ"],
+    date: "2026-11-21",
+    hours: "9PM–3AM",
+    venue: "Secret location, Atlanta",
+    tags: ["Techno", "Hypnotic Techno", "Hard Techno"],
+    flyerSrc: "/flyers/anethaflyer.webp",
+    ticketsHref: shotgunEvent("brainwash-presents-anetha"),
+  },
+  {
     id: "daxj",
     title: "Brainwash Presents: Dax J, Laure Croft",
     headline: "Dax J + Laure Croft",

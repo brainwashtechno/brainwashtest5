@@ -5,14 +5,15 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import BrandLogo from "@/components/brand-logo";
 import { nav } from "@/data/site";
-import { getUpcomingEvents, SHOTGUN_PAGE } from "@/data/events";
+import { SHOTGUN_PAGE } from "@/data/events";
+
+// The Brainwash page on Shotgun lists every show on sale, not just the next one.
+const ticketsHref = SHOTGUN_PAGE;
 
 export default function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const next = getUpcomingEvents()[0];
-  const ticketsHref = next?.ticketsHref ?? SHOTGUN_PAGE;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);

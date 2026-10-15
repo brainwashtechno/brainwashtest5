@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Hero from "@/components/hero";
 import EventFeature from "@/components/event-feature";
+import EventCard from "@/components/event-card";
 import RecapGrid from "@/components/recap-grid";
 import PhotoStrip from "@/components/photo-strip";
-import { getPastEvents, getUpcomingEvents, shortDate, uniqueArtistCount, SHOTGUN_PAGE } from "@/data/events";
+import { getPastEvents, getUpcomingEvents, uniqueArtistCount, SHOTGUN_PAGE } from "@/data/events";
 import { allPhotos } from "@/data/gallery";
 import { site } from "@/data/site";
 
@@ -41,7 +42,13 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {next ? (
+          {upcoming.length > 1 ? (
+            <div className="grid gap-16 md:grid-cols-2 md:gap-10">
+              {upcoming.map((e, i) => (
+                <EventCard key={e.id} event={e} delay={i * 120} />
+              ))}
+            </div>
+          ) : next ? (
             <EventFeature event={next} />
           ) : (
             <div data-reveal style={{ border: "1px solid var(--line)", padding: "56px 28px", textAlign: "center" }}>
@@ -56,22 +63,6 @@ export default function HomePage() {
               </a>
             </div>
           )}
-
-          {upcoming.length > 1 ? (
-            <ul style={{ listStyle: "none", padding: 0, margin: "56px 0 0" }}>
-              {upcoming.slice(1).map((e) => (
-                <li key={e.id} className="hairline" style={{ padding: "20px 0", display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-                  <span className="mono">{shortDate(e.date)}</span>
-                  <span className="display" style={{ fontSize: 28 }}>
-                    {e.headline}
-                  </span>
-                  <a href={e.ticketsHref} target="_blank" rel="noreferrer" className="link-arrow">
-                    Tickets ↗
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : null}
         </div>
       </section>
 
